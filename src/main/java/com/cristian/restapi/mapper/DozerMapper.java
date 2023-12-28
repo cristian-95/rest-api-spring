@@ -6,7 +6,7 @@ import com.github.dozermapper.core.Mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// TODO: Criar testes do mock e mapper
 public class DozerMapper {
 
     private static Mapper mapper = DozerBeanMapperBuilder.buildDefault();
