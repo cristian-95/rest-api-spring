@@ -26,14 +26,14 @@ public class PersonService {
     private Logger logger = Logger.getLogger(PersonService.class.getName());
 
     public List<PersonVO> findAll() {
-        logger.info("Finding all people!");
+        logger.info("Listando todas as pessoas");
         var people = DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
         people.stream().forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getKey())).withSelfRel()));
         return people;
     }
 
     public PersonVO findById(Long id) {
-        logger.info("Finding one person!");
+        logger.info("Encontrando uma pessoa");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         var vo = DozerMapper.parseObject(entity, PersonVO.class);
@@ -42,7 +42,7 @@ public class PersonService {
     }
 
     public PersonVO create(PersonVO person) {
-        logger.info("Creating one person!");
+        logger.info("Registrando uma pessoa");
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
@@ -50,7 +50,7 @@ public class PersonService {
     }
 
     public PersonVO update(PersonVO person) {
-        logger.info("Updating one person!");
+        logger.info("Atualizando um registro pessoa");
 
         var entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
@@ -65,7 +65,7 @@ public class PersonService {
     }
 
     public void delete(Long id) {
-        logger.info("Deleting one person!");
+        logger.info("Deletando um registro de pessoa");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         repository.delete(entity);
