@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-// TODO Criar testes de integração e testes unitários
-
 
 @Service
 public class PersonService {
