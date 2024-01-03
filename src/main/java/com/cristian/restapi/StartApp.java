@@ -8,7 +8,7 @@ public class StartApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(StartApp.class, args);
-		System.out.println("\n\n\n");
+		System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 	}
 
 

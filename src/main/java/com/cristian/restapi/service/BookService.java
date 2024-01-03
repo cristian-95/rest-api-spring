@@ -1,7 +1,9 @@
 package com.cristian.restapi.service;
 
 import com.cristian.restapi.controller.BookController;
+import com.cristian.restapi.controller.PersonController;
 import com.cristian.restapi.data.vo.v1.BookVO;
+import com.cristian.restapi.data.vo.v1.PersonVO;
 import com.cristian.restapi.exception.ResourceNotFoundException;
 import com.cristian.restapi.mapper.DozerMapper;
 import com.cristian.restapi.model.Book;
@@ -51,12 +53,15 @@ public class BookService {
     public BookVO update(BookVO book) {
         logger.info("Atualizando um livro");
         var entity = repository.findById(book.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-        var vo = DozerMapper.parseObject(entity, BookVO.class);
-        vo.setTitle(book.getTitle());
-        vo.setAuthor(book.getAuthor());
-        vo.setPrice(book.getPrice());
-        vo.setLaunchDate(book.getLaunchDate());
+
+        entity.setTitle(book.getTitle());
+        entity.setAuthor(book.getAuthor());
+        entity.setPrice(book.getPrice());
+        entity.setLaunchDate(book.getLaunchDate());
+
+        var vo = DozerMapper.parseObject(repository.save(entity), BookVO.class);
         vo.add(linkTo(methodOn(BookController.class).findById(vo.getKey())).withSelfRel());
+
         return vo;
     }
 

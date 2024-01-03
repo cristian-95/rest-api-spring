@@ -12,8 +12,9 @@ import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
     private static final MediaType MEDIA_TYPE_APPLICATION_YML = MediaType.valueOf("application/x-yaml");
-    //TODO: testar cors
+
     @Value("${cors.originPatterns:default}")
     private String corsOriginPatterns = "";
 
@@ -28,10 +29,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .favorParameter(false)
                 .ignoreAcceptHeader(false)
                 .useRegisteredExtensionsOnly(false)
-                .defaultContentType(MediaType.APPLICATION_JSON)
                 .mediaType("json", MediaType.APPLICATION_JSON)
                 .mediaType("xml", MediaType.APPLICATION_XML)
-                .mediaType("x-yaml", MEDIA_TYPE_APPLICATION_YML);
+                .mediaType("x-yaml", MEDIA_TYPE_APPLICATION_YML)
+                .defaultContentType(MediaType.APPLICATION_JSON);
     }
 }
 

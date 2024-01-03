@@ -15,13 +15,12 @@ import java.util.logging.Logger;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-
 @Service
 public class PersonService {
 
+    private Logger logger = Logger.getLogger(PersonService.class.getName());
     @Autowired
     PersonRepository repository;
-    private Logger logger = Logger.getLogger(PersonService.class.getName());
 
     public List<PersonVO> findAll() {
         logger.info("Listando todas as pessoas");
@@ -48,7 +47,7 @@ public class PersonService {
     }
 
     public PersonVO update(PersonVO person) {
-        logger.info("Atualizando um registro pessoa");
+        logger.info("Atualizando um registro de pessoa");
 
         var entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 

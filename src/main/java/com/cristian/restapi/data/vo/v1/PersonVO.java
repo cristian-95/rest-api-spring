@@ -1,7 +1,6 @@
 package com.cristian.restapi.data.vo.v1;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dozermapper.core.Mapping;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -10,21 +9,15 @@ import java.util.Objects;
 
 public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 
-    // TODO: REVISAR ISSO AQUI COM FREQUENCIA
-    /* RepresentationModel é util para adicionar links ao objeto antes de retorna-lo ao usuario
-    *  Por estar utilizando o DozerMapper, é necessário que a id do Value Object seja denotada por outra coisa que não seja 'id', nesse caso foi escolhido 'key'
-    * */
-
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
-    @Mapping("id")
+
     private Long key;
     private String firstName;
     private String lastName;
     private String address;
     private String gender;
-//    private Boolean enabled;
 
     public PersonVO() {
     }
