@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-    // TODO estudar termos de serviço e como gera-los
     @Bean
     OpenAPI customOpenAPI(){
         return new OpenAPI()
