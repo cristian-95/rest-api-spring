@@ -2,7 +2,6 @@ server:
   port: 8888
 cors:
   originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
-
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -11,10 +10,7 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
-
 springdoc:
-  pathsToMatch:
-    - /auth/**
-    - /api/**/v1/**
+  pathsToMatch: /api/**/v1/**
   swagger-ui:
     use-root-path: true

@@ -1,7 +1,6 @@
 cors:
   originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
 spring:
-  profiles.active: development
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/rest_with_spring_boot_udemy?useTimezone=true&serverTimezone=UTC
@@ -18,5 +17,3 @@ springdoc:
     - /api/**/v1/**
   swagger-ui:
     use-root-path: true
-
-#TODO: REFATORAR O CÓDIGO
