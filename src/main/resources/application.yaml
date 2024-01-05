@@ -1,5 +1,12 @@
 cors:
   originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
+
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 3600000 # 1 hour
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -11,6 +18,7 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: false
+
 springdoc:
   pathsToMatch:
     - /auth/**
