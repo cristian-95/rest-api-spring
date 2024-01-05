@@ -39,6 +39,8 @@ public class PersonService {
     }
 
     public PersonVO create(PersonVO person) {
+//		if (person == null) throw new RequiredObjectIsNullException();
+
         logger.info("Registrando uma pessoa");
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
