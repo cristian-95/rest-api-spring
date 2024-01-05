@@ -1,6 +1,5 @@
 package com.cristian.restapi.data.vo.v1;
 
-import com.cristian.restapi.model.Book;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.RepresentationModel;

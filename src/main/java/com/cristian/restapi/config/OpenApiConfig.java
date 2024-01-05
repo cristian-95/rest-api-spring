@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
     @Bean
-    OpenAPI customOpenAPI(){
+    OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("REST API's implementada utilizando Java 21, Spring Boot 3.2.0 e Docker")

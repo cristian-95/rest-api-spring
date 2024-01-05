@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DozerMapper {
 
-    private static ModelMapper mapper = new ModelMapper();
+    private static final ModelMapper mapper = new ModelMapper();
 
     static {
         mapper.createTypeMap(Person.class, PersonVO.class)

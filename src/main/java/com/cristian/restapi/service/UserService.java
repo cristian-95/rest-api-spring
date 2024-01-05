@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @Service
 public class UserService implements UserDetailsService {
 
-    private Logger logger = Logger.getLogger(UserService.class.getName());
+    private final Logger logger = Logger.getLogger(UserService.class.getName());
     @Autowired
     UserRepository repository;
 

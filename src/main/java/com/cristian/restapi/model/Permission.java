@@ -1,11 +1,8 @@
 package com.cristian.restapi.model;
 
 import jakarta.persistence.*;
-
 import org.springframework.security.core.GrantedAuthority;
 
-
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 

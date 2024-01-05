@@ -1,9 +1,7 @@
 package com.cristian.restapi.service;
 
 import com.cristian.restapi.controller.BookController;
-import com.cristian.restapi.controller.PersonController;
 import com.cristian.restapi.data.vo.v1.BookVO;
-import com.cristian.restapi.data.vo.v1.PersonVO;
 import com.cristian.restapi.exception.ResourceNotFoundException;
 import com.cristian.restapi.mapper.DozerMapper;
 import com.cristian.restapi.model.Book;
@@ -20,7 +18,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class BookService {
 
-    private Logger logger = Logger.getLogger(BookService.class.getName());
+    private final Logger logger = Logger.getLogger(BookService.class.getName());
 
     @Autowired
     private BookRepository repository;
@@ -38,7 +36,7 @@ public class BookService {
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         var vo = DozerMapper.parseObject(entity, BookVO.class);
         vo.add(linkTo(methodOn(BookController.class).findById(id)).withSelfRel());
-     // vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+        // vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
         return vo;
     }
 
