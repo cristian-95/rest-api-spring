@@ -21,7 +21,7 @@ public class AuthController {
     @Operation(summary = "Authenticates an user and returns a token")
     @PostMapping("/signin")
     public ResponseEntity signin(@RequestBody AccountCredentialVO data) {
-        if (checkIfParamsIsNotNull(data))
+        if (checkForNullParams(data))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request.");
 
         var token = authService.signin(data);
@@ -33,7 +33,7 @@ public class AuthController {
     @Operation(summary = "Refresh token for authenticated user and returns a token")
     @PutMapping("/refresh/{username}")
     public ResponseEntity refreshToken(@PathVariable("username") String username, @RequestHeader("Authorization") String refreshToken) {
-        if (checkIfParamsIsNotNull(username, refreshToken))
+        if (checkForNullParams(username, refreshToken))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request.");
 
         var token = authService.refreshToken(username, refreshToken);
@@ -41,11 +41,11 @@ public class AuthController {
         return token;
     }
 
-    private static boolean checkIfParamsIsNotNull(String username, String refreshToken) {
+    private static boolean checkForNullParams(String username, String refreshToken) {
         return refreshToken == null || refreshToken.isBlank() || username == null || username.isBlank();
     }
 
-    private static boolean checkIfParamsIsNotNull(AccountCredentialVO data) {
+    private static boolean checkForNullParams(AccountCredentialVO data) {
         return data == null || data.getUsername() == null || data.getUsername().isBlank()
                 || data.getPassword() == null || data.getPassword().isBlank();
     }
