@@ -1,7 +1,11 @@
 package com.cristian.restapi.integrationtests.vo.security;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
 import java.util.Objects;
+
+@XmlRootElement
 
 public class AccountCredentialVO implements Serializable {
 

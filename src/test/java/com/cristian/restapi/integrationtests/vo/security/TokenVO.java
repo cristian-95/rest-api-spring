@@ -1,5 +1,7 @@
 package com.cristian.restapi.integrationtests.vo.security;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -28,7 +30,7 @@ public class TokenVO implements Serializable {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
