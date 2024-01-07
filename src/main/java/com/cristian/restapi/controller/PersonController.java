@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/people/v1")
-@Tag(name = "Pessoas", description = "Endpoint para o gerenciamento de pessoas")
+@Tag(name = "People", description = "Endpoint para o gerenciamento de pessoas")
 public class PersonController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class PersonController {
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Listar pessoas", description = "Lista todas as pessoas cadastradas",
-            tags = {"Pessoas"},
+            tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = "application/json",
@@ -42,7 +42,7 @@ public class PersonController {
     @GetMapping(value = "/{id}",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Exibir pessoa", description = "Encontra uma pessoa especifica com base em seu ID",
-            tags = {"Pessoas"},
+            tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = "application/json",
@@ -60,7 +60,7 @@ public class PersonController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Registrar pessoa", description = "Registra uma pessoa e armazena no banco de dados",
-            tags = {"Pessoas"},
+            tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = "application/json",
@@ -76,7 +76,7 @@ public class PersonController {
     @PutMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Modificar pessoa", description = "Modifica uma pessoa e atualiza o banco de dados",
-            tags = {"Pessoas"},
+            tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(mediaType = "application/json",
@@ -90,9 +90,28 @@ public class PersonController {
         return ResponseEntity.ok(service.update(person));
     }
 
+    @PatchMapping(value = "/{id}",
+            produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
+    @Operation(summary = "Disable a specific person by your ID", description = "Disable a specific person by your ID",
+            tags = {"People"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = PersonVO.class)))),
+                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
+            })
+    public ResponseEntity<PersonVO> disablePerson(@PathVariable(value = "id") Long id) {
+        return ResponseEntity.ok(service.disablePerson(id));
+    }
+
+
     @DeleteMapping(value = "/{id}")
-    @Operation(summary = "Deletar pessoa", description = "Remove uma pessoa do banco de dados",
-            tags = {"Pessoas"},
+    @Operation(summary = "Delete a specific person", description = "Delete a specific person",
+            tags = {"People"},
             responses = {
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),

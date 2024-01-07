@@ -95,6 +95,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
         assertTrue(persistedPerson.getId() > 0);
         assertEquals("Rodion", persistedPerson.getFirstName());
         assertEquals("Raskólnikov", persistedPerson.getLastName());
@@ -129,6 +130,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
+
         assertEquals(person.getId(), persistedPerson.getId());
         assertEquals("Ródia", persistedPerson.getFirstName());
         assertEquals("Raskólnikov", persistedPerson.getLastName());
@@ -139,6 +142,42 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
+    public void testDisablePersonById() throws JsonProcessingException {
+
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .pathParams("id", person.getId())
+                        .when()
+                        .patch("{id} ")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+        PersonVO foundedPerson = objectMapper.readValue(content, PersonVO.class);
+        person = foundedPerson;
+
+        assertNotNull(foundedPerson);
+        assertNotNull(foundedPerson.getId());
+        assertNotNull(foundedPerson.getFirstName());
+        assertNotNull(foundedPerson.getLastName());
+        assertNotNull(foundedPerson.getAddress());
+        assertNotNull(foundedPerson.getGender());
+
+        assertFalse(foundedPerson.getEnabled());
+
+
+        assertTrue(foundedPerson.getId() > 0);
+        assertEquals("Ródia", foundedPerson.getFirstName());
+        assertEquals("Raskólnikov", foundedPerson.getLastName());
+        assertEquals("São Petesburgo - Russia", foundedPerson.getAddress());
+        assertEquals("Male", foundedPerson.getGender());
+    }
+
+    @Test
+    @Order(4)
     public void testFindById() throws JsonProcessingException {
 
         var content =
@@ -163,6 +202,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundedPerson.getLastName());
         assertNotNull(foundedPerson.getAddress());
         assertNotNull(foundedPerson.getGender());
+        assertFalse(foundedPerson.getEnabled());
+
         assertTrue(foundedPerson.getId() > 0);
         assertEquals("Ródia", foundedPerson.getFirstName());
         assertEquals("Raskólnikov", foundedPerson.getLastName());
@@ -171,7 +212,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testDelete() throws JsonProcessingException {
         given()
                 .spec(specification)
@@ -184,7 +225,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testFindAll() throws JsonProcessingException {
 
         var contentString =
@@ -243,7 +284,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         var specificationWithoutToken = new RequestSpecBuilder()
@@ -267,6 +308,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         person.setLastName("Raskólnikov");
         person.setAddress("São Petesburgo - Russia");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 
 }

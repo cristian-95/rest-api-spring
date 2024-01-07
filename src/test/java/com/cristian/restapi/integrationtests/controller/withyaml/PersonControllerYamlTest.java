@@ -113,6 +113,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
         assertTrue(persistedPerson.getId() > 0);
         assertEquals("Rodion", persistedPerson.getFirstName());
         assertEquals("Raskólnikov", persistedPerson.getLastName());
@@ -154,6 +155,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(updatedPerson.getLastName());
         assertNotNull(updatedPerson.getAddress());
         assertNotNull(updatedPerson.getGender());
+        assertTrue(updatedPerson.getEnabled());
         assertEquals(person.getId(), updatedPerson.getId());
         assertEquals("Ródia", updatedPerson.getFirstName());
         assertEquals("Raskólnikov", updatedPerson.getLastName());
@@ -164,6 +166,44 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
+    public void testDisablePersonById() throws JsonProcessingException {
+
+        var foundPerson = given()
+                .config(
+                        RestAssuredConfig
+                                .config()
+                                .encoderConfig(
+                                        EncoderConfig.
+                                                encoderConfig()
+                                                .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
+                .spec(specification)
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .pathParams("id", person.getId())
+                .when()
+                .patch("{id} ")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(PersonVO.class, ymlMapper);
+
+        assertNotNull(foundPerson);
+        assertNotNull(foundPerson.getId());
+        assertNotNull(foundPerson.getFirstName());
+        assertNotNull(foundPerson.getLastName());
+        assertNotNull(foundPerson.getAddress());
+        assertNotNull(foundPerson.getGender());
+        assertFalse(foundPerson.getEnabled());
+        assertTrue(foundPerson.getId() > 0);
+        assertEquals("Ródia", foundPerson.getFirstName());
+        assertEquals("Raskólnikov", foundPerson.getLastName());
+        assertEquals("São Petesburgo - Russia", foundPerson.getAddress());
+        assertEquals("Male", foundPerson.getGender());
+    }
+
+    @Test
+    @Order(4)
     public void testFindById() throws JsonProcessingException {
 
         var foundPerson = given()
@@ -193,6 +233,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundPerson.getLastName());
         assertNotNull(foundPerson.getAddress());
         assertNotNull(foundPerson.getGender());
+        assertFalse(foundPerson.getEnabled());
         assertTrue(foundPerson.getId() > 0);
         assertEquals("Ródia", foundPerson.getFirstName());
         assertEquals("Raskólnikov", foundPerson.getLastName());
@@ -201,7 +242,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testDelete() throws JsonProcessingException {
         given()
                 .config(
@@ -222,7 +263,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testFindAll() throws JsonProcessingException {
 
         var content =
@@ -287,7 +328,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         var specificationWithoutToken = new RequestSpecBuilder()
@@ -319,6 +360,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         person.setLastName("Raskólnikov");
         person.setAddress("São Petesburgo - Russia");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 
 }

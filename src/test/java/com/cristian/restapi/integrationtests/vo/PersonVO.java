@@ -18,6 +18,8 @@ public class PersonVO implements Serializable {
     private String address;
     private String gender;
 
+    private Boolean enabled;
+
     public PersonVO() {
     }
 
@@ -61,18 +63,38 @@ public class PersonVO implements Serializable {
         this.gender = gender;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         PersonVO personVO = (PersonVO) o;
-        return Objects.equals(id, personVO.id) && Objects.equals(firstName, personVO.firstName) && Objects.equals(lastName, personVO.lastName) && Objects.equals(address, personVO.address) && Objects.equals(gender, personVO.gender);
+
+        if (!Objects.equals(id, personVO.id)) return false;
+        if (!Objects.equals(firstName, personVO.firstName)) return false;
+        if (!Objects.equals(lastName, personVO.lastName)) return false;
+        if (!Objects.equals(address, personVO.address)) return false;
+        if (!Objects.equals(gender, personVO.gender)) return false;
+        return Objects.equals(enabled, personVO.enabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address, gender);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
+        return result;
     }
 }
 
