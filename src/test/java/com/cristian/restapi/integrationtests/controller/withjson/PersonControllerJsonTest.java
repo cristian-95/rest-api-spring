@@ -5,8 +5,8 @@ import com.cristian.restapi.integrationtests.testcontainers.AbstractIntegrationT
 import com.cristian.restapi.integrationtests.vo.PersonVO;
 import com.cristian.restapi.integrationtests.vo.security.AccountCredentialVO;
 import com.cristian.restapi.integrationtests.vo.security.TokenVO;
+import com.cristian.restapi.integrationtests.vo.wrappers.WrapperPersonVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -16,8 +16,6 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -232,6 +230,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
                 given()
                         .spec(specification)
                         .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .queryParams("page", 3,"size",10, "direction", "asc")
                         .when()
                         .get()
                         .then()
@@ -240,8 +239,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
                         .body()
                         .asString();
 
-        List<PersonVO> people = objectMapper.readValue(contentString, new TypeReference<List<PersonVO>>() {
-        });
+        WrapperPersonVO wrapper = objectMapper.readValue(contentString, WrapperPersonVO.class);
+        var people = wrapper.getEmbedded().getPersonVOList();
 
         var foundPersonOne = people.getFirst();
 
@@ -251,10 +250,10 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getAddress());
         assertNotNull(foundPersonOne.getGender());
         assertTrue(foundPersonOne.getEnabled());
-        assertEquals(1, foundPersonOne.getId());
-        assertEquals("Ayrton", foundPersonOne.getFirstName());
-        assertEquals("Senna", foundPersonOne.getLastName());
-        assertEquals("São Paulo", foundPersonOne.getAddress());
+        assertEquals(677, foundPersonOne.getId());
+        assertEquals("Alic", foundPersonOne.getFirstName());
+        assertEquals("Terbrug", foundPersonOne.getLastName());
+        assertEquals("3 Eagle Crest Court", foundPersonOne.getAddress());
         assertEquals("Male", foundPersonOne.getGender());
 
         var foundPersonFive = people.get(3);
@@ -264,11 +263,11 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonFive.getLastName());
         assertNotNull(foundPersonFive.getAddress());
         assertNotNull(foundPersonFive.getGender());
-        assertTrue(foundPersonFive.getEnabled());
-        assertEquals(5, foundPersonFive.getId());
-        assertEquals("Mahatma", foundPersonFive.getFirstName());
-        assertEquals("Gandhi", foundPersonFive.getLastName());
-        assertEquals("Porbandar - India", foundPersonFive.getAddress());
+        assertFalse(foundPersonFive.getEnabled());
+        assertEquals(409, foundPersonFive.getId());
+        assertEquals("Alister", foundPersonFive.getFirstName());
+        assertEquals("Etheridge", foundPersonFive.getLastName());
+        assertEquals("333 Lakewood Gardens Street", foundPersonFive.getAddress());
         assertEquals("Male", foundPersonFive.getGender());
 
         var foundPersonTen = people.get(6);
@@ -278,11 +277,11 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonTen.getLastName());
         assertNotNull(foundPersonTen.getAddress());
         assertNotNull(foundPersonTen.getGender());
-        assertTrue(foundPersonTen.getEnabled());
-        assertEquals(10, foundPersonTen.getId());
-        assertEquals("Nikola", foundPersonTen.getFirstName());
-        assertEquals("Tesla", foundPersonTen.getLastName());
-        assertEquals("Smiljan - Croácia", foundPersonTen.getAddress());
+        assertFalse(foundPersonTen.getEnabled());
+        assertEquals(797, foundPersonTen.getId());
+        assertEquals("Allin", foundPersonTen.getFirstName());
+        assertEquals("Emmot", foundPersonTen.getLastName());
+        assertEquals("7913 Lindbergh Way", foundPersonTen.getAddress());
         assertEquals("Male", foundPersonTen.getGender());
     }
 

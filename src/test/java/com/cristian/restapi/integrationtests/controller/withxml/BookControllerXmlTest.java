@@ -3,10 +3,10 @@ package com.cristian.restapi.integrationtests.controller.withxml;
 import com.cristian.restapi.configs.TestConfigs;
 import com.cristian.restapi.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.cristian.restapi.integrationtests.vo.BookVO;
+import com.cristian.restapi.integrationtests.vo.pagedmodels.PagedModelBook;
 import com.cristian.restapi.integrationtests.vo.security.AccountCredentialVO;
 import com.cristian.restapi.integrationtests.vo.security.TokenVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -193,6 +192,7 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
                         .spec(specification)
                         .contentType(TestConfigs.CONTENT_TYPE_XML)
                         .accept(TestConfigs.CONTENT_TYPE_XML)
+                        .queryParams("page", 0, "size", 5, "direction", "asc")
                         .when()
                         .get()
                         .then()
@@ -201,18 +201,18 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
                         .body()
                         .asString();
 
-        List<BookVO> books = objectMapper.readValue(contentString, new TypeReference<List<BookVO>>() {
-        });
+        PagedModelBook wrapper = objectMapper.readValue(contentString, PagedModelBook.class);
+        var books = wrapper.getContent();
 
         var foundBookOne = books.getFirst();
         assertNotNull(foundBookOne.getId());
         assertNotNull(foundBookOne.getTitle());
         assertNotNull(foundBookOne.getAuthor());
         assertNotNull(foundBookOne.getPrice());
-        assertEquals(1, foundBookOne.getId());
-        assertEquals("Working effectively with legacy code", foundBookOne.getTitle());
-        assertEquals("Michael C. Feathers", foundBookOne.getAuthor());
-        assertEquals(49.00, foundBookOne.getPrice());
+        assertEquals(12, foundBookOne.getId());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", foundBookOne.getTitle());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", foundBookOne.getAuthor());
+        assertEquals(54.00, foundBookOne.getPrice());
 
 
         var foundBookFive = books.get(4);
@@ -220,21 +220,10 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
         assertNotNull(foundBookFive.getTitle());
         assertNotNull(foundBookFive.getAuthor());
         assertNotNull(foundBookFive.getPrice());
-        assertEquals(5, foundBookFive.getId());
-        assertEquals("Code complete", foundBookFive.getTitle());
-        assertEquals("Steve McConnell", foundBookFive.getAuthor());
-        assertEquals(58.00, foundBookFive.getPrice());
-
-        var foundBookTen = books.get(9);
-        assertNotNull(foundBookTen.getId());
-        assertNotNull(foundBookTen.getTitle());
-        assertNotNull(foundBookTen.getAuthor());
-        assertNotNull(foundBookTen.getPrice());
-        assertEquals(10, foundBookTen.getId());
-        assertEquals("O poder dos quietos", foundBookTen.getTitle());
-        assertEquals("Susan Cain", foundBookTen.getAuthor());
-
-        assertEquals(123.00, foundBookTen.getPrice());
+        assertEquals(8, foundBookFive.getId());
+        assertEquals("Domain Driven Design", foundBookFive.getTitle());
+        assertEquals("Eric Evans", foundBookFive.getAuthor());
+        assertEquals(92.00, foundBookFive.getPrice());
     }
 
     @Test
