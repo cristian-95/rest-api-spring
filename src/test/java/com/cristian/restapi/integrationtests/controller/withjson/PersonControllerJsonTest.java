@@ -224,13 +224,49 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
     @Test
     @Order(6)
+    public void testFindByName() throws JsonProcessingException {
+
+        var contentString =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .queryParams("page", 0, "size", 6, "direction", "asc")
+                        .pathParam("firstName", "ayr")
+                        .when()
+                        .get("/findByName/{firstName}")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        WrapperPersonVO wrapper = objectMapper.readValue(contentString, WrapperPersonVO.class);
+        var people = wrapper.getEmbedded().getPersonVOList();
+
+        var foundPerson = people.getFirst();
+
+        assertNotNull(foundPerson.getId());
+        assertNotNull(foundPerson.getFirstName());
+        assertNotNull(foundPerson.getLastName());
+        assertNotNull(foundPerson.getAddress());
+        assertNotNull(foundPerson.getGender());
+        assertTrue(foundPerson.getEnabled());
+        assertEquals(1, foundPerson.getId());
+        assertEquals("Ayrton", foundPerson.getFirstName());
+        assertEquals("Senna", foundPerson.getLastName());
+        assertEquals("São Paulo", foundPerson.getAddress());
+        assertEquals("Male", foundPerson.getGender());
+    }
+
+    @Test
+    @Order(7)
     public void testFindAll() throws JsonProcessingException {
 
         var contentString =
                 given()
                         .spec(specification)
                         .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                        .queryParams("page", 3,"size",10, "direction", "asc")
+                        .queryParams("page", 3, "size", 10, "direction", "asc")
                         .when()
                         .get()
                         .then()
@@ -286,7 +322,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         var specificationWithoutToken = new RequestSpecBuilder()

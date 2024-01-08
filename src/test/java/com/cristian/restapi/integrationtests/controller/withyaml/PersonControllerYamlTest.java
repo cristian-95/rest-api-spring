@@ -262,6 +262,51 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 
     @Test
     @Order(6)
+    public void testFindByName() throws JsonProcessingException {
+
+        var wrapper =
+                given()
+                        .config(
+                                RestAssuredConfig
+                                        .config()
+                                        .encoderConfig(
+                                                EncoderConfig.
+                                                        encoderConfig()
+                                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_YML)
+                        .accept(TestConfigs.CONTENT_TYPE_YML)
+                        .queryParams("page", 0, "size", 6, "direction", "asc")
+                        .pathParam("firstName", "ayr")
+                        .when()
+                        .get("/findByName/{firstName}")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .as(PagedModelPerson.class, ymlMapper);
+
+
+        var people = wrapper.getContent();
+
+        var foundPerson = people.getFirst();
+        assertNotNull(foundPerson.getId());
+        assertNotNull(foundPerson.getFirstName());
+        assertNotNull(foundPerson.getLastName());
+        assertNotNull(foundPerson.getAddress());
+        assertNotNull(foundPerson.getGender());
+        assertTrue(foundPerson.getEnabled());
+        assertEquals(1, foundPerson.getId());
+        assertEquals("Ayrton", foundPerson.getFirstName());
+        assertEquals("Senna", foundPerson.getLastName());
+        assertEquals("São Paulo", foundPerson.getAddress());
+        assertEquals("Male", foundPerson.getGender());
+
+
+    }
+
+    @Test
+    @Order(7)
     public void testFindAll() throws JsonProcessingException {
 
         var wrapper =
@@ -332,7 +377,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         var specificationWithoutToken = new RequestSpecBuilder()

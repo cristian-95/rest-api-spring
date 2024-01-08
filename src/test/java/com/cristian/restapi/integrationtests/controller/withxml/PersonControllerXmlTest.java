@@ -226,6 +226,42 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
 
     @Test
     @Order(6)
+    public void testFindByName() throws JsonProcessingException {
+
+        var contentString =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
+                        .queryParams("page", 0, "size", 6, "direction", "asc")
+                        .pathParam("firstName", "ayr")
+                        .when()
+                        .get("/findByName/{firstName}")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        PagedModelPerson wrapper = objectMapper.readValue(contentString, PagedModelPerson.class);
+        var people = wrapper.getContent();
+
+        var foundPerson = people.getFirst();
+        assertNotNull(foundPerson.getId());
+        assertNotNull(foundPerson.getFirstName());
+        assertNotNull(foundPerson.getLastName());
+        assertNotNull(foundPerson.getAddress());
+        assertNotNull(foundPerson.getGender());
+        assertTrue(foundPerson.getEnabled());
+        assertEquals(1, foundPerson.getId());
+        assertEquals("Ayrton", foundPerson.getFirstName());
+        assertEquals("Senna", foundPerson.getLastName());
+        assertEquals("São Paulo", foundPerson.getAddress());
+        assertEquals("Male", foundPerson.getGender());
+    }
+
+    @Test
+    @Order(7)
     public void testFindAll() throws JsonProcessingException {
 
         var contentString =
@@ -289,7 +325,7 @@ public class PersonControllerXmlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         var specificationWithoutToken = new RequestSpecBuilder()
