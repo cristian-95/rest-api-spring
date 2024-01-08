@@ -7,9 +7,13 @@ import com.cristian.restapi.mapper.DozerMapper;
 import com.cristian.restapi.model.Book;
 import com.cristian.restapi.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -23,12 +27,23 @@ public class BookService {
     @Autowired
     private BookRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<BookVO> assembler;
 
-    public List<BookVO> findall() {
+
+    public PagedModel<EntityModel<BookVO>> findall(Pageable pageable) {
         logger.info("Listando todos os livros");
-        var voList = DozerMapper.parseListObjects(repository.findAll(), BookVO.class);
-        voList.stream().forEach(b -> b.add(linkTo(methodOn(BookController.class).findById(b.getKey())).withSelfRel()));
-        return voList;
+
+
+        var bookPage = repository.findAll(pageable);
+
+        var bookVOPage = bookPage.map(b -> DozerMapper.parseObject(b, BookVO.class));
+        bookVOPage.map(b -> b.add(linkTo(methodOn(BookController.class).findById(b.getKey())).withSelfRel()));
+
+        Link link = linkTo(methodOn(BookController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "Asc"
+
+        )).withSelfRel();
+        return assembler.toModel(bookVOPage, link);
     }
 
     public BookVO findById(Long id) {
