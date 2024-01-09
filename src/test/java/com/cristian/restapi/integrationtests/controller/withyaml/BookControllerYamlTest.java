@@ -301,6 +301,45 @@ public class BookControllerYamlTest extends AbstractIntegrationTest {
                 .statusCode(403);
     }
 
+    @Test
+    @Order(7)
+    public void testHATEOAS() throws JsonProcessingException {
+
+        var rawContent =
+                given()
+                        .config(
+                                RestAssuredConfig
+                                        .config()
+                                        .encoderConfig(
+                                                EncoderConfig.
+                                                        encoderConfig()
+                                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT)))
+
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_YML)
+                        .accept(TestConfigs.CONTENT_TYPE_YML)
+                        .queryParams("page", 0, "size", 5, "direction", "asc")
+                        .when()
+                        .get()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        var content = rawContent.replace("\n", "").replace("\r", "");
+
+
+        assertTrue(content.contains("- rel: \"first\"  href: \"http://localhost:8888/api/books/v1?direction=Asc&page=0&size=5&sort=title,asc\""));
+        assertTrue(content.contains("- rel: \"self\"  href: \"http://localhost:8888/api/books/v1?page=0&size=5&direction=Asc\""));
+        assertTrue(content.contains("- rel: \"next\"  href: \"http://localhost:8888/api/books/v1?direction=Asc&page=1&size=5&sort=title,asc\""));
+        assertTrue(content.contains("- rel: \"last\"  href: \"http://localhost:8888/api/books/v1?direction=Asc&page=2&size=5&sort=title,asc\""));
+        assertTrue(content.contains("links:  - rel: \"self\"    href: \"http://localhost:8888/api/books/v1/12\"  links: []"));
+        assertTrue(content.contains("- rel: \"self\"    href: \"http://localhost:8888/api/books/v1/3\"  links: []"));
+        assertTrue(content.contains("- rel: \"self\"    href: \"http://localhost:8888/api/books/v1/5\"  links: []"));
+        assertTrue(content.contains("page:  size: 5  totalElements: 15  totalPages: 3  number: 0"));
+    }
+
     private void mockBook() {
         book.setTitle("Crime e Castigo");
         book.setAuthor("Fiódor Dostoiévski");

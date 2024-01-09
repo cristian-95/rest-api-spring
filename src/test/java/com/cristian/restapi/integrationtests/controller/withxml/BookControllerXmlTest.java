@@ -247,6 +247,36 @@ public class BookControllerXmlTest extends AbstractIntegrationTest {
                 .statusCode(403);
     }
 
+    @Test
+    @Order(7)
+    public void testHATEOAS() throws JsonProcessingException {
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_XML)
+                        .accept(TestConfigs.CONTENT_TYPE_XML)
+                        .queryParams("page", 0, "size", 5, "direction", "asc")
+                        .when()
+                        .get()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        assertTrue(content.contains("<links><rel>next</rel><href>http://localhost:8888/api/books/v1?direction=Asc&amp;page=1&amp;size=5&amp;sort=title,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>last</rel><href>http://localhost:8888/api/books/v1?direction=Asc&amp;page=2&amp;size=5&amp;sort=title,asc</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/books/v1?page=0&amp;size=5&amp;direction=Asc</href></links>"));
+        assertTrue(content.contains("<links><rel>first</rel><href>http://localhost:8888/api/books/v1?direction=Asc&amp;page=0&amp;size=5&amp;sort=title,asc</href></links>"));
+
+        assertTrue(content.contains("<page><size>5</size><totalElements>15</totalElements><totalPages>3</totalPages><number>0</number></page>"));
+
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/books/v1/12</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/books/v1/3</href></links>"));
+        assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/books/v1/8</href></links>"));
+    }
+
+
     private void mockBook() {
         book.setTitle("Crime e Castigo");
         book.setAuthor("Fiódor Dostoiévski");

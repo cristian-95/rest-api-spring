@@ -241,6 +241,33 @@ public class BookControllerJsonTest extends AbstractIntegrationTest {
                 .statusCode(403);
     }
 
+    @Test
+    @Order(7)
+    public void testHATEOAS() throws JsonProcessingException {
+
+        var content =
+                given()
+                        .spec(specification)
+                        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                        .queryParams("page", 0, "size", 5, "direction", "asc")
+                        .when()
+                        .get()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .asString();
+
+        assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/books/v1/12\""));
+        assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/books/v1/3\""));
+        assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/books/v1/5\""));
+        assertTrue(content.contains("\"first\":{\"href\":\"http://localhost:8888/api/books/v1?direction=Asc&page=0&size=5&sort=title,asc\"}"));
+        assertTrue(content.contains("\"self\":{\"href\":\"http://localhost:8888/api/books/v1?page=0&size=5&direction=Asc\""));
+        assertTrue(content.contains("\"next\":{\"href\":\"http://localhost:8888/api/books/v1?direction=Asc&page=1&size=5&sort=title,asc\""));
+        assertTrue(content.contains("\"last\":{\"href\":\"http://localhost:8888/api/books/v1?direction=Asc&page=2&size=5&sort=title,asc\""));
+        assertTrue(content.contains("\"page\":{\"size\":5,\"totalElements\":15,\"totalPages\":3,\"number\":0}"));
+    }
+
     private void mockBook() {
         book.setTitle("Crime e Castigo");
         book.setAuthor("Fiódor Dostoiévski");
