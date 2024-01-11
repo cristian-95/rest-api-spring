@@ -35,8 +35,9 @@ jobs:
         cache: maven
     
     - name: Build Application Jar
-      working-directory: ./rest-api
-      run: mvn clean package
+      run: |
+        cd rest-api && \
+        mvn clean package
 
     - name: Docker Compose Build
       run: docker compose build 
