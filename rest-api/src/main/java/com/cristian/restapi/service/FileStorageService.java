@@ -23,11 +23,9 @@ public class FileStorageService {
 
     @Autowired
     public FileStorageService(FileStorageConfig storageConfig) throws IOException {
-        Path path = Paths.get(storageConfig.getUploadDir()).normalize();
-        System.out.println(path.getFileName().toString());
+        Path path = Paths.get(storageConfig.getUploadDir()).toAbsolutePath().normalize();
 
         this.fileStorageLocation = path;
-
         try {
             Files.createDirectories(this.fileStorageLocation);
 

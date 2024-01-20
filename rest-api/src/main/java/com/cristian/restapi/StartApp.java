@@ -20,9 +20,9 @@ public class StartApp {
         DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
         passwordEncoder.setDefaultPasswordEncoderForMatches(new Pbkdf2PasswordEncoder("", 8, 185000, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256));
 
-        String result = passwordEncoder.encode("admin123");
-
-        System.out.println("My hash " + result);
+//        String result = passwordEncoder.encode("admin123");
+//
+//        System.out.println("My hash " + result);
         System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 }

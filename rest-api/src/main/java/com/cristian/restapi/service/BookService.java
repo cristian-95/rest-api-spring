@@ -31,8 +31,8 @@ public class BookService {
     PagedResourcesAssembler<BookVO> assembler;
 
 
-    public PagedModel<EntityModel<BookVO>> findall(Pageable pageable) {
-        logger.info("Listando todos os livros");
+    public PagedModel<EntityModel<BookVO>> findAll(Pageable pageable) {
+        logger.info("Finding all books");
 
 
         var bookPage = repository.findAll(pageable);
@@ -47,7 +47,7 @@ public class BookService {
     }
 
     public BookVO findById(Long id) {
-        logger.info("Encontrando um livro");
+        logger.info("Find a book (id = " + id + ")");
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         var vo = DozerMapper.parseObject(entity, BookVO.class);
         vo.add(linkTo(methodOn(BookController.class).findById(id)).withSelfRel());
@@ -56,7 +56,7 @@ public class BookService {
     }
 
     public BookVO create(BookVO book) {
-        logger.info("Registrando um livro");
+        logger.info("Creating a new book");
         var entity = DozerMapper.parseObject(book, Book.class);
         var vo = DozerMapper.parseObject(repository.save(entity), BookVO.class);
         vo.add(linkTo(methodOn(BookController.class).findById(vo.getKey())).withSelfRel());
@@ -64,7 +64,7 @@ public class BookService {
     }
 
     public BookVO update(BookVO book) {
-        logger.info("Atualizando um livro");
+        logger.info("Upgrading a book");
         var entity = repository.findById(book.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
         entity.setTitle(book.getTitle());
@@ -79,7 +79,7 @@ public class BookService {
     }
 
     public void delete(Long id) {
-        logger.info("REmovendo um livro");
+        logger.info("Deleting a book");
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID to delete"));
         repository.delete(entity);
     }

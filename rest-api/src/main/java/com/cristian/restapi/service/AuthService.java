@@ -31,14 +31,14 @@ public class AuthService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
             var user = repository.findByUsername(username);
-            var tokenReponse = new TokenVO();
+            var tokenResponse = new TokenVO();
 
             if (user != null) {
-                tokenReponse = tokenProvider.createAccessToken(username, user.getRoles());
+                tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
             } else {
                 throw new UsernameNotFoundException("Username " + username + " not found.");
             }
-            return ResponseEntity.ok(tokenReponse);
+            return ResponseEntity.ok(tokenResponse);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new BadCredentialsException("Invalid username/password supplied.");
@@ -48,14 +48,14 @@ public class AuthService {
     @SuppressWarnings("rawtypes")
     public ResponseEntity refreshToken(String username, String refreshToken) {
         var user = repository.findByUsername(username);
-        var tokenReponse = new TokenVO();
+        var tokenResponse = new TokenVO();
 
         if (user != null) {
-            tokenReponse = tokenProvider.refreshToken(refreshToken);
+            tokenResponse = tokenProvider.refreshToken(refreshToken);
         } else {
             throw new UsernameNotFoundException("Username " + username + " not found.");
         }
-        return ResponseEntity.ok(tokenReponse);
+        return ResponseEntity.ok(tokenResponse);
 
     }
 }

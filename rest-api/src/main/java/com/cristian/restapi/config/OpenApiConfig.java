@@ -12,10 +12,9 @@ public class OpenApiConfig {
     OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("REST API's implementada utilizando Java 21, Spring Boot 3.2.0 e Docker")
+                        .title("REST API with Spring Boot 3.2")
                         .version("v1")
-                        .description("Uma API simples para fixar conhecimentos de Spring Boot, Docker, Testes, Autenticação e outros conceitos")
-                        .termsOfService("TODO: implementar termos de serviço")
+                        .description("A simple REST API.")
                         .license(
                                 new License()
                                         .name("Apache 2.0")

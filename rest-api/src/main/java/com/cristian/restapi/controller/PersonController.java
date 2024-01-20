@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/people/v1")
-@Tag(name = "People", description = "Endpoint para o gerenciamento de pessoas")
+@Tag(name = "People", description = "Endpoint for managing people")
 public class PersonController {
 
     @Autowired
@@ -75,7 +75,7 @@ public class PersonController {
 
     @GetMapping(value = "/{id}",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
-    @Operation(summary = "Exibir pessoa", description = "Encontra uma pessoa especifica com base em seu ID",
+    @Operation(summary = "Finds a person", description = "Finds a person",
             tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
@@ -93,7 +93,7 @@ public class PersonController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
-    @Operation(summary = "Registrar pessoa", description = "Registra uma pessoa e armazena no banco de dados",
+    @Operation(summary = "Creates a new person", description = "Creates a new person",
             tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
@@ -109,7 +109,7 @@ public class PersonController {
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
-    @Operation(summary = "Modificar pessoa", description = "Modifica uma pessoa e atualiza o banco de dados",
+    @Operation(summary = "Upgrades a person", description = "Upgrades a person",
             tags = {"People"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
@@ -144,7 +144,7 @@ public class PersonController {
 
 
     @DeleteMapping(value = "/{id}")
-    @Operation(summary = "Delete a specific person", description = "Delete a specific person",
+    @Operation(summary = "Deletes a specific person", description = "Deletes a specific person",
             tags = {"People"},
             responses = {
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),

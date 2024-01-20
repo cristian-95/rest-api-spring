@@ -31,7 +31,7 @@ public class PersonService {
     PagedResourcesAssembler<PersonVO> assembler;
 
     public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
-        logger.info("Listando todas as pessoas");
+        logger.info("Finding all people");
 
         var personPage = repository.findAll(pageable);
         var personVosPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
@@ -54,7 +54,7 @@ public class PersonService {
     }
 
     public PagedModel<EntityModel<PersonVO>> findPeopleByName(String firstName, Pageable pageable) {
-        logger.info("Listando todas as pessoas");
+        logger.info("Finding a person with first name = " + firstName);
 
         var personPage = repository.findPeopleByName(firstName, pageable);
         var personVosPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
@@ -78,7 +78,7 @@ public class PersonService {
     }
 
     public PersonVO findById(Long id) {
-        logger.info("Encontrando uma pessoa");
+        logger.info("finding a person with id = " + id);
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         var vo = DozerMapper.parseObject(entity, PersonVO.class);
@@ -87,9 +87,7 @@ public class PersonService {
     }
 
     public PersonVO create(PersonVO person) {
-//		if (person == null) throw new RequiredObjectIsNullException();
-
-        logger.info("Registrando uma pessoa");
+        logger.info("Creating a new  person");
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
@@ -97,7 +95,7 @@ public class PersonService {
     }
 
     public PersonVO update(PersonVO person) {
-        logger.info("Atualizando um registro de pessoa");
+        logger.info("Upgrading a person");
 
         var entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
@@ -122,7 +120,7 @@ public class PersonService {
     }
 
     public void delete(Long id) {
-        logger.info("Deletando um registro de pessoa");
+        logger.info("Deleting a person");
 
         var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
         repository.delete(entity);

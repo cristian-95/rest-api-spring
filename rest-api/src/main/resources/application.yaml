@@ -1,9 +1,9 @@
 server:
-  port: 80
+  port: 8080
 cors:
-  originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
+  originPatterns: http://localhost:3000,http://localhost:80,http://localhost:8080,https://erudio.com.br,http://localhost:8081
 file:
-  upload-dir: /home/runner/work/rest-api-spring/uploadDir
+  upload-dir: ./storage
 security:
   jwt:
     token:
@@ -13,8 +13,8 @@ security:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/rest_with_spring_boot_udemy?useTimezone=true&serverTimezone=UTC
-    username: root
+    url: jdbc:mysql://rest-with-spring-boot-udemy.cdca6auga2ic.us-east-2.rds.amazonaws.com:3306/rest_with_spring_boot_udemy?useTimezone=true&serverTimezone=UTC
+    username: docker
     password: admin123
   jpa:
     open-in-view: false
@@ -27,7 +27,6 @@ spring:
       file-size-threshold: 2KB
       max-file-size: 200MB
       max-request-size: 215MB
-
 
 springdoc:
   pathsToMatch:
